@@ -3,24 +3,60 @@
 
 Group::Group()
 {
-	_code = "";
+	_code = (char*)"";
+
 	_countStudents = 0;
 	_maxCount = 30;
 	_students = new Student[_maxCount];
 }
-Group::Group(const char* code)
+Group::Group(char* code)
 {
-	_code = code;
+	_code = new char[strlen(code) + 1];
+	strcpy(_code, code);
+
 	_countStudents = 0;
 	_maxCount = 30;
 	_students = new Student[_maxCount];
 }
-Group::Group(const char* code, Student* students, ulong count)
+Group::Group(char* code, Student* students, ulong count)
 {
-	_code = code;
+	_code = new char[strlen(code) + 1];
+	strcpy(_code, code);
+
 	_countStudents = count;
 	_maxCount = count;
 	_students = students;
+}
+Group::Group(const Group &obj)
+{
+	_code = new char[strlen(obj._code) + 1];
+	strcpy(_code, obj._code);
+
+	_countStudents = 0;
+	_maxCount = 30;
+	_students = new Student[_maxCount];
+
+	for (int i = 0; i < obj._countStudents; i++)
+	{
+		AddStudent(obj._students[i]);
+	}
+}
+
+Group& Group::operator=(Group &group) //перегрузка оператора присваивания
+{
+	_code = new char[strlen(group._code) + 1];
+	strcpy(_code, group._code);
+
+	_countStudents = 0;
+	_maxCount = 30;
+	_students = new Student[_maxCount];
+
+	for (int i = 0; i < group._countStudents; i++)
+	{
+		AddStudent(group._students[i]);
+	}
+
+	return *this;
 }
 
 bool Group::AddStudent(Student student)
@@ -73,12 +109,13 @@ bool Group::RemoveStudent(ulong id)
 		return false;
 	}
 }
-bool Group::RenameGroup(const char* newCode)
+bool Group::RenameGroup(char* newCode)
 {
 	if (newCode == "")
 		return false;
 
-	_code = newCode;
+	_code = new char[strlen(newCode) + 1];
+	strcpy(_code, newCode);
 	return true;
 }
 
@@ -90,11 +127,11 @@ ulong Group::StudentsCount()
 {
 	return _countStudents;
 }
-Student Group::Get(int index)
+Student* Group::Get(int index)
 {
-	return *(_students + index);
+	return (_students + index);
 }
-const char* Group::GetCode()
+char* Group::GetCode()
 {
 	return _code;
 }
@@ -128,7 +165,7 @@ void Group::PrintStudents()
 
 Group::~Group()
 {
-	delete _code;
+	_code = nullptr;
 	delete[] _students;
 }
 

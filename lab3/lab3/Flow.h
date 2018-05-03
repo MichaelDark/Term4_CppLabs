@@ -3,18 +3,19 @@
 
 class Flow
 {
-	string _code;
+	char* _code;
 	ulong _countGroups;
 	ulong _maxCount;
 	Group* _groups;
 public:
 	Flow();
-	Flow(string code);
+	Flow(char* code);
+	Flow(const Flow &obj);
 
 	bool AddGroup(Group student);
-	bool RemoveGroup(string groupCode);
-	bool RenameFlow(string newCode);
-	bool HasGroup(string code);
+	bool RemoveGroup(char* groupCode);
+	bool RenameFlow(char* newCode);
+	bool HasGroup(char* code);
 	bool HasStudent(ulong id);
 
 	ulong GroupsCount();
@@ -22,7 +23,7 @@ public:
 	bool IsEmpty();
 	bool HasStudents();
 	Group* Get(int index);
-	string GetCode();
+	char* GetCode();
 
 	void PrintInfo();
 	void PrintGroups();

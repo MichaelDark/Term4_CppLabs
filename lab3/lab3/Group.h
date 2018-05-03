@@ -4,29 +4,32 @@
 struct Student
 {
 	ulong id;
-	const char* name;
+	char* name;
 };
 
 class Group
 {
-	const char* _code;
+	char* _code;
 	ulong _countStudents;
 	ulong _maxCount;
 	Student* _students;
 public:
 	Group();
-	Group(const char* code);
-	Group(const char* code, Student* students, ulong count);
+	Group(char* code);
+	Group(char* code, Student* students, ulong count);
+	Group(const Group &obj);
+
+	Group& operator=(Group &group);
 
 	bool AddStudent(Student student);
 	bool HasStudent(ulong id);
 	bool RemoveStudent(ulong id);
-	bool RenameGroup(const char* newCode);
+	bool RenameGroup(char* newCode);
 
 	bool IsEmpty();
 	ulong StudentsCount();
-	Student Get(int index);
-	const char* GetCode();
+	Student* Get(int index);
+	char* GetCode();
 
 	void PrintInfo();
 	void PrintStudents();

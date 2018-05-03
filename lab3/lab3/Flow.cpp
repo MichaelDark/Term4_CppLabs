@@ -3,17 +3,28 @@
 
 Flow::Flow()
 {
-	_code = "";
+	_code = (char*)"";
+
 	_countGroups = 0;
 	_maxCount = 30;
 	_groups = new Group[_maxCount];
 }
-Flow::Flow(string code)
+Flow::Flow(char* code)
 {
-	_code = code;
+	_code = new char[strlen(code) + 1];
+	strcpy(_code, code);
+
 	_countGroups = 0;
 	_maxCount = 30;
 	_groups = new Group[_maxCount];
+}
+Flow::Flow(const Flow &obj)
+{
+	Flow newFlow(_code);
+	for (int i = 0; i < _countGroups; i++)
+	{
+		newFlow.AddGroup(_groups[i]);
+	}
 }
 
 bool Flow::AddGroup(Group group)
@@ -25,7 +36,7 @@ bool Flow::AddGroup(Group group)
 	_countGroups++;
 	return true;
 }
-bool Flow::HasGroup(string groupCode)
+bool Flow::HasGroup(char* groupCode)
 {
 	for (int i = 0; i < _countGroups; i++)
 	{
@@ -47,7 +58,7 @@ bool Flow::HasStudent(ulong id)
 	}
 	return false;
 }
-bool Flow::RemoveGroup(string groupCode)
+bool Flow::RemoveGroup(char* groupCode)
 {
 	if (IsEmpty())
 		return false;
@@ -77,12 +88,13 @@ bool Flow::RemoveGroup(string groupCode)
 		return false;
 	}
 }
-bool Flow::RenameFlow(string newCode)
+bool Flow::RenameFlow(char* newCode)
 {
 	if (newCode == "")
 		return false;
 
-	_code = newCode;
+	_code = new char[strlen(newCode) + 1];
+	strcpy(_code, newCode);
 	return true;
 }
 
@@ -120,7 +132,7 @@ Group* Flow::Get(int index)
 {
 	return &_groups[index];
 }
-string Flow::GetCode()
+char* Flow::GetCode()
 {
 	return _code;
 }
@@ -128,7 +140,7 @@ string Flow::GetCode()
 void Flow::PrintInfo()
 {
 	cout << "== Flow Info " << endl;
-	cout << "Code    : " << _code.c_str() << endl;
+	cout << "Code    : " << _code << endl;
 	cout << "Groups  : " << _countGroups << endl;
 	cout << "Students: " << StudentsCount() << endl;
 	cout << endl;
@@ -141,7 +153,7 @@ void Flow::PrintGroups()
 		return;
 	}
 
-	cout << "== Flow: " << _code.c_str() << endl;
+	cout << "== Flow: " << _code << endl;
 	cout << "num:    count,    name" << endl;
 	for (int i = 0; i < _countGroups; i++)
 	{
@@ -166,7 +178,7 @@ void Flow::PrintStudents()
 	}
 	ulong totalCount = 1;
 
-	cout << "== Flow: " << _code.c_str() << endl;
+	cout << "== Flow: " << _code << endl;
 	cout << "num:       id,    name" << endl;
 	for (int i = 0; i < _countGroups; i++)
 	{
@@ -174,8 +186,8 @@ void Flow::PrintStudents()
 		ulong studentCount = currGroup->StudentsCount();
 		for (int j = 0; j < studentCount; j++)
 		{
-			Student currStudent = currGroup->Get(j);
-			cout << setw(3) << totalCount << ": " << setw(8) << currStudent.id << ", " << currStudent.name << endl;
+			Student* currStudent = currGroup->Get(j);
+			cout << setw(3) << totalCount << ": " << setw(8) << currStudent->id << ", " << currStudent->name << endl;
 			totalCount++;
 		}
 	}
@@ -184,6 +196,7 @@ void Flow::PrintStudents()
 
 Flow::~Flow()
 {
+	_code = nullptr;
 	delete[] _groups;
 }
 
